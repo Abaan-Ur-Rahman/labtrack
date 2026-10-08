@@ -1,0 +1,4 @@
+admin admin123 admin
+tech tech123 technician
+student student123 student
+dep dep123 department
