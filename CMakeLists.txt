@@ -4,10 +4,14 @@ project(labtrack C)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
-# Temporary: main.c still #includes the other .c files directly, so it is
-# the only file compiled. The next step gives each module its own header
-# and lists every .c file here.
-add_executable(labtrack src/main.c)
+add_executable(labtrack
+    src/main.c
+    src/admin.c
+    src/technician.c
+    src/student.c
+    src/department.c
+)
+target_include_directories(labtrack PRIVATE include)
 
 if(MSVC)
     target_compile_options(labtrack PRIVATE /W4)
