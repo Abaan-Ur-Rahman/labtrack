@@ -1,7 +1,7 @@
-#include "Admin.h"
-#include "ABD.h"
-#include "michael.h"
-#include "departmenthead.h"
+#include "admin.c"
+#include "technician.c"
+#include "student.c"
+#include "department.c"
 
 int login(char *user_role) {
     char inputuser[20], inputpass[20];
