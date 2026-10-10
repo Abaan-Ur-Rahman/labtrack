@@ -1,17 +1,10 @@
 #include "labtrack/technician.h"
+#include "labtrack/models.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-
-typedef struct {
-    int id;
-    char name[50];
-    char category[50];  // Added category
-    int quantity;
-    char location[50];
-} Equipment;
 
 typedef struct {
     int student_id;

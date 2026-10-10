@@ -1,16 +1,9 @@
 #include "labtrack/department.h"
+#include "labtrack/models.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-struct Equipment_3 {
-    char id[10];
-    char name[50];
-    int quantity;
-    char location[30];
-    char category[30];
-};
 
 struct BorrowLog {
     char studentId[15];
@@ -28,7 +21,7 @@ struct Request {
 
 static void displayEquipments(void) {
     FILE *file;
-    struct Equipment_3 item;
+    Equipment item;
 
     file = fopen("equipment.txt", "r");
     if (file == NULL) {
@@ -37,8 +30,8 @@ static void displayEquipments(void) {
     }
 
     printf("\nList of Equipment:\n");
-    while (fscanf(file, "%s %s %s %d %s", item.id, item.name, item.category, &item.quantity, item.location) == 5) {
-        printf("ID: %s | Name: %s | Quantity: %d | Location: %s | Category: %s\n",
+    while (fscanf(file, "%d %49s %49s %d %49s", &item.id, item.name, item.category, &item.quantity, item.location) == 5) {
+        printf("ID: %d | Name: %s | Quantity: %d | Location: %s | Category: %s\n",
                item.id, item.name, item.quantity, item.location, item.category);
     }
 

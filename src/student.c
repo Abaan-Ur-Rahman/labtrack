@@ -1,15 +1,8 @@
 #include "labtrack/student.h"
+#include "labtrack/models.h"
 
 #include <stdio.h>
 #include <string.h>
-
-typedef struct {
-    int id;
-    char name[50];
-    char category[50];
-    int quantity;
-    char location[50];
-} equipment_2;
 
 static void availability(void);
 static void reqborrow(const char *user);
@@ -45,7 +38,7 @@ void studentMenu(void) {
 }
 
 static void availability(void) {
-    equipment_2 e;
+    Equipment e;
     FILE *f = fopen("equipment.txt", "r");
     if (!f) {
         printf("Cannot open equipment.txt\n");

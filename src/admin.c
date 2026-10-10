@@ -1,15 +1,8 @@
 #include "labtrack/admin.h"
+#include "labtrack/models.h"
 
 #include <stdio.h>
 #include <string.h>
-
-struct equipment {
-    int id;
-    char name[50];
-    char category[50];
-    int quantity;
-    char location[50];
-};
 
 int string_equal(char *a, char *b) {
     int i = 0;
@@ -27,7 +20,7 @@ static void clearInput(void) {
 
 static int last_id(void) {
     FILE *fp = fopen("equipment.txt", "r");
-    struct equipment e;
+    Equipment e;
     int last = 0;
 
     if (fp != NULL) {
@@ -42,7 +35,7 @@ static int last_id(void) {
 
 static void add_equipment(void) {
     FILE *fp = fopen("equipment.txt", "a");
-    struct equipment e;
+    Equipment e;
 
     if (fp == NULL) {
         printf("File not found.\n");
@@ -70,7 +63,7 @@ static void add_equipment(void) {
 
 static void view_equipment(void) {
     FILE *fp = fopen("equipment.txt", "r");
-    struct equipment e;
+    Equipment e;
     int found = 0;
 
     if (fp == NULL) {
@@ -97,7 +90,7 @@ static void view_equipment(void) {
 
 static void remove_equipment(void) {
     int id, found = 0;
-    struct equipment e;
+    Equipment e;
 
     printf("Enter equipment ID to remove the equipment: ");
     scanf("%d", &id);
@@ -132,7 +125,7 @@ static void remove_equipment(void) {
 
 static void update_equipment(void) {
     int id, found = 0;
-    struct equipment e;
+    Equipment e;
 
     printf("Enter equipment ID to update the equipment: ");
     scanf("%d", &id);
