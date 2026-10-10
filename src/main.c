@@ -26,14 +26,14 @@ static int login(char *user_role) {
 
         int found = 0;
         while (fscanf(fp, "%s %s %s", fileuser, filepass, filerole) == 3) {
-            if (string_equal(inputuser, fileuser) && string_equal(inputpass, filepass)) {
+            if (strcmp(inputuser, fileuser) == 0 && strcmp(inputpass, filepass) == 0) {
                 strcpy(user_role, filerole);
                 fclose(fp);
 
-                if (string_equal(filerole, "admin")) return 1;
-                else if (string_equal(filerole, "technician")) return 2;
-                else if (string_equal(filerole, "student")) return 3;
-                else if (string_equal(filerole, "department")) return 4;
+                if (strcmp(filerole, "admin") == 0) return 1;
+                else if (strcmp(filerole, "technician") == 0) return 2;
+                else if (strcmp(filerole, "student") == 0) return 3;
+                else if (strcmp(filerole, "department") == 0) return 4;
                 else {
                     printf("Unknown role: %s\n", filerole);
                     return 0;

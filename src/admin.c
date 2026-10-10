@@ -1,22 +1,9 @@
 #include "labtrack/admin.h"
+#include "labtrack/input.h"
 #include "labtrack/models.h"
 
 #include <stdio.h>
 #include <string.h>
-
-int string_equal(char *a, char *b) {
-    int i = 0;
-    while (a[i] != '\0' && b[i] != '\0') {
-        if (a[i] != b[i]) return 0;
-        i++;
-    }
-    return a[i] == b[i];
-}
-
-static void clearInput(void) {
-    char c;
-    while ((c = getchar()) != '\n' && c != EOF);
-}
 
 static int last_id(void) {
     FILE *fp = fopen("equipment.txt", "r");

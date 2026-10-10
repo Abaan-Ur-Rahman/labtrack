@@ -6,6 +6,7 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 
 add_executable(labtrack
     src/main.c
+    src/input.c
     src/admin.c
     src/technician.c
     src/student.c
