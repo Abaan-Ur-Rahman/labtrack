@@ -3,6 +3,7 @@
 
 #include "labtrack/admin.h"
 #include "labtrack/department.h"
+#include "labtrack/input.h"
 #include "labtrack/student.h"
 #include "labtrack/technician.h"
 
@@ -13,10 +14,8 @@ static int login(char *user_role) {
 
     while (attempt < 3) {
         printf("\nLOGIN\n");
-        printf("Enter your username: ");
-        scanf("%s", inputuser);
-        printf("Enter the password: ");
-        scanf("%s", inputpass);
+        read_word("Enter your username: ", inputuser, sizeof inputuser);
+        read_word("Enter the password: ", inputpass, sizeof inputpass);
 
         FILE *fp = fopen("login.txt", "r");
         if (fp == NULL) {
@@ -24,8 +23,7 @@ static int login(char *user_role) {
             return 0;
         }
 
-        int found = 0;
-        while (fscanf(fp, "%s %s %s", fileuser, filepass, filerole) == 3) {
+        while (fscanf(fp, "%19s %19s %19s", fileuser, filepass, filerole) == 3) {
             if (strcmp(inputuser, fileuser) == 0 && strcmp(inputpass, filepass) == 0) {
                 strcpy(user_role, filerole);
                 fclose(fp);
@@ -59,9 +57,8 @@ static void main_menu(void) {
         printf("\n2. Lab Technician");
         printf("\n3. Student");
         printf("\n4. Department Head");
-        printf("\n5. Exit");
-        printf("\nEnter your choice: ");
-        scanf("%d", &pick);
+        printf("\n5. Exit\n");
+        pick = read_int("Enter your choice: ", 1, 5);
 
         switch (pick) {
             case 1:
