@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 void clearInput(void) {
-    char c;
+    int c; /* int, not char: getchar() returns EOF (-1) as an int */
     while ((c = getchar()) != '\n' && c != EOF);
 }
+ 
