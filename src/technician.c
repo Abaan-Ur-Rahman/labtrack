@@ -1,4 +1,5 @@
 #include "labtrack/technician.h"
+#include "labtrack/input.h"
 #include "labtrack/models.h"
 
 #include <stdio.h>
@@ -10,7 +11,7 @@ typedef struct {
     int student_id;
     int equipment_id;
     char borrow_date[11];
-    int is_returned; 
+    int is_returned;
 } BorrowRecord;
 
 static Equipment inventory[50];
@@ -108,12 +109,9 @@ static void issueEquipment(void) {
     char date[11];
 
     printf("\n=== Issue Equipment ===\n");
-    printf("Enter Equipment ID: ");
-    scanf("%d", &equipId);
-    printf("Enter Student ID: ");
-    scanf("%d", &studentId);
-    printf("Enter Date (YYYY-MM-DD): ");
-    scanf("%10s", date);
+    equipId = read_int("Enter Equipment ID: ", 1, MAX_ID);
+    studentId = read_int("Enter Student ID: ", 1, MAX_ID);
+    read_word("Enter Date (YYYY-MM-DD): ", date, sizeof date);
 
     for (int i = 0; i < itemCount; i++) {
         if (inventory[i].id == equipId) {
@@ -142,16 +140,14 @@ static void returnEquipment(void) {
     int equipId, studentId, found = 0;
 
     printf("\n=== Return Equipment ===\n");
-    printf("Enter Equipment ID: ");
-    scanf("%d", &equipId);
-    printf("Enter Student ID: ");
-    scanf("%d", &studentId);
+    equipId = read_int("Enter Equipment ID: ", 1, MAX_ID);
+    studentId = read_int("Enter Student ID: ", 1, MAX_ID);
 
     for (int i = 0; i < borrowCount; i++) {
-        if (borrowRecords[i].equipment_id == equipId && 
-            borrowRecords[i].student_id == studentId &&  
+        if (borrowRecords[i].equipment_id == equipId &&
+            borrowRecords[i].student_id == studentId &&
             !borrowRecords[i].is_returned) {
-            
+
             borrowRecords[i].is_returned = 1;
             for (int j = 0; j < itemCount; j++) {
                 if (inventory[j].id == equipId) {
@@ -180,16 +176,12 @@ static void addEquipment(void) {
     }
 
     printf("\n=== Add New Equipment ===\n");
-    printf("Enter Equipment ID: ");
-    scanf("%d", &inventory[itemCount].id);
-    printf("Enter Equipment Name: ");
-    scanf("%49s", inventory[itemCount].name);
-    printf("Enter Equipment Category: ");
-    scanf("%49s", inventory[itemCount].category);
-    printf("Enter Initial Quantity: ");
-    scanf("%d", &inventory[itemCount].quantity);
-    printf("Enter Equipment Location: ");
-    scanf("%49s", inventory[itemCount].location);
+    Equipment *e = &inventory[itemCount];
+    e->id = read_int("Enter Equipment ID: ", 1, MAX_ID);
+    read_word("Enter Equipment Name: ", e->name, sizeof e->name);
+    read_word("Enter Equipment Category: ", e->category, sizeof e->category);
+    e->quantity = read_int("Enter Initial Quantity: ", 0, MAX_QUANTITY);
+    read_word("Enter Equipment Location: ", e->location, sizeof e->location);
 
     itemCount++;
     saveEquipment();
@@ -202,12 +194,10 @@ static void searchEquipment(void) {
 
     printf("\n=== Search Equipment ===\n");
     printf("1. By ID\n2. By Name\n3. By Location\n4. By Category\n");
-    printf("Enter choice (1-4): ");
-    scanf("%d", &choice);
+    choice = read_int("Enter choice (1-4): ", 1, 4);
 
-    printf("Enter search term: ");
-    if (choice == 1) scanf("%d", &id);
-    else scanf("%49s", query);
+    if (choice == 1) id = read_int("Enter search term: ", 1, MAX_ID);
+    else read_word("Enter search term: ", query, sizeof query);
 
     printf("\n=== Search Results ===\n");
     printf("ID\tName\t\tCategory\tQuantity\tLocation\n");
@@ -222,8 +212,8 @@ static void searchEquipment(void) {
             case 4: if (strstr(inventory[i].category, query)) match = 1; break;
         }
         if (match) {
-            printf("%d\t%-12s\t%-12s\t%d\t\t%-12s\n", 
-                   inventory[i].id, 
+            printf("%d\t%-12s\t%-12s\t%d\t\t%-12s\n",
+                   inventory[i].id,
                    inventory[i].name,
                    inventory[i].category,
                    inventory[i].quantity,
@@ -255,7 +245,6 @@ static void showMenu(void) {
     printf("5. Search Equipment\n");
     printf("6. Generate Usage Report\n");
     printf("7. Exit\n");
-    printf("Enter your choice: ");
 }
 
 void lab_main(void) {
@@ -265,7 +254,7 @@ void lab_main(void) {
     int choice;
     do {
         showMenu();
-        scanf("%d", &choice);
+        choice = read_int("Enter your choice: ", 1, 7);
 
         switch (choice) {
             case 1: displayInventory(); break;
@@ -279,4 +268,3 @@ void lab_main(void) {
         }
     } while (choice != 7);
 }
-
