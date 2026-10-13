@@ -7,6 +7,10 @@
  * File reads must use a width of TEXT_LEN - 1, e.g. "%49s". */
 #define TEXT_LEN 50
 
+/* Largest equipment ID and largest quantity of one item the system accepts. */
+#define MAX_ID 999999
+#define MAX_QUANTITY 100000
+
 /* One equipment record, as stored in equipment.txt:
  * id name category quantity location */
 typedef struct {
