@@ -31,16 +31,10 @@ static void add_equipment(void) {
 
     e.id = last_id() + 1;
 
-    clearInput();
-    printf("Enter the equipment's name (Use _ instead of space): ");
-    scanf("%s", e.name);
-    printf("Enter the category (Use _ instead of space): ");
-    scanf("%s", e.category);
-    printf("Enter the quantity: ");
-    scanf("%d", &e.quantity);
-    clearInput();
-    printf("Enter the location (Use _ instead of space): ");
-    scanf("%s", e.location);
+    read_word("Enter the equipment's name (Use _ instead of space): ", e.name, sizeof e.name);
+    read_word("Enter the category (Use _ instead of space): ", e.category, sizeof e.category);
+    e.quantity = read_int("Enter the quantity: ", 0, MAX_QUANTITY);
+    read_word("Enter the location (Use _ instead of space): ", e.location, sizeof e.location);
 
     fprintf(fp, "%d %s %s %d %s\n", e.id, e.name, e.category, e.quantity, e.location);
     fclose(fp);
@@ -79,8 +73,7 @@ static void remove_equipment(void) {
     int id, found = 0;
     Equipment e;
 
-    printf("Enter equipment ID to remove the equipment: ");
-    scanf("%d", &id);
+    id = read_int("Enter equipment ID to remove the equipment: ", 1, MAX_ID);
 
     FILE *fp = fopen("equipment.txt", "r");
     FILE *temp = fopen("temp.txt", "w");
@@ -114,8 +107,7 @@ static void update_equipment(void) {
     int id, found = 0;
     Equipment e;
 
-    printf("Enter equipment ID to update the equipment: ");
-    scanf("%d", &id);
+    id = read_int("Enter equipment ID to update the equipment: ", 1, MAX_ID);
 
     FILE *fp = fopen("equipment.txt", "r");
     FILE *temp = fopen("temp.txt", "w");
@@ -127,16 +119,10 @@ static void update_equipment(void) {
 
     while (fscanf(fp, "%d %s %s %d %s", &e.id, e.name, e.category, &e.quantity, e.location) != EOF) {
         if (e.id == id) {
-            clearInput();
-            printf("Enter new name (Use _ instead of space): ");
-            scanf("%s", e.name);
-            printf("Enter new category (Use _ instead of space): ");
-            scanf("%s", e.category);
-            printf("Enter new quantity: ");
-            scanf("%d", &e.quantity);
-            clearInput();
-            printf("Enter new location (Use _ instead of space): ");
-            scanf("%s", e.location);
+            read_word("Enter new name (Use _ instead of space): ", e.name, sizeof e.name);
+            read_word("Enter new category (Use _ instead of space): ", e.category, sizeof e.category);
+            e.quantity = read_int("Enter new quantity: ", 0, MAX_QUANTITY);
+            read_word("Enter new location (Use _ instead of space): ", e.location, sizeof e.location);
             found = 1;
         }
         fprintf(temp, "%d %s %s %d %s\n", e.id, e.name, e.category, e.quantity, e.location);
@@ -163,9 +149,8 @@ static void admin_menu(void) {
         printf("\n2. View Equipment");
         printf("\n3. Remove Equipment");
         printf("\n4. Update Equipment");
-        printf("\n5. Logout");
-        printf("\nEnter your choice: ");
-        scanf("%d", &choice);
+        printf("\n5. Logout\n");
+        choice = read_int("Enter your choice: ", 1, 5);
 
         switch (choice) {
             case 1: add_equipment(); break;
@@ -181,4 +166,3 @@ static void admin_menu(void) {
 void admin_main(void) {
     admin_menu();
 }
-
