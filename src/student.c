@@ -1,4 +1,5 @@
 #include "labtrack/student.h"
+#include "labtrack/input.h"
 #include "labtrack/models.h"
 
 #include <stdio.h>
@@ -10,11 +11,10 @@ static void chk(const char *user);
 static void viewhistory(const char *user);
 
 void studentMenu(void) {
-    char user[50];
+    char user[TEXT_LEN];
     int choice;
 
-    printf("Enter your name: ");
-    scanf("%s", user);
+    read_word("Enter your name: ", user, sizeof user);
 
     do {
         printf("\n--- Student Menu ---\n");
@@ -23,8 +23,7 @@ void studentMenu(void) {
         printf("3. Check Request Status\n");
         printf("4. View Borrowing History\n");
         printf("5. Exit\n");
-        printf("Choice: ");
-        scanf("%d", &choice);
+        choice = read_int("Choice: ", 1, 5);
 
         switch (choice) {
             case 1: availability(); break;
@@ -46,7 +45,7 @@ static void availability(void) {
     }
 
     printf("\nID | Name | Quantity | Category | Location\n");
-    while (fscanf(f, "%d %s %s %d %s", &e.id, e.name, e.category, &e.quantity, e.location) == 5) {
+    while (fscanf(f, "%d %49s %49s %d %49s", &e.id, e.name, e.category, &e.quantity, e.location) == 5) {
         if (e.quantity > 0)
             printf("%d | %s | %s | %d | %s\n", e.id, e.name, e.category, e.quantity, e.location);
     }
@@ -55,9 +54,7 @@ static void availability(void) {
 }
 
 static void reqborrow(const char *user) {
-    int id;
-    printf("Enter Equipment ID: ");
-    scanf("%d", &id);
+    int id = read_int("Enter Equipment ID: ", 1, MAX_ID);
 
     FILE *f = fopen("requests.txt", "a");
     if (!f) {
@@ -71,7 +68,7 @@ static void reqborrow(const char *user) {
 }
 
 static void chk(const char *user) {
-    char name[50], status[20];
+    char name[TEXT_LEN], status[20];
     int id, found = 0;
     FILE *f = fopen("requests.txt", "r");
 
@@ -81,7 +78,7 @@ static void chk(const char *user) {
     }
 
     printf("\nYour Requests:\n");
-    while (fscanf(f, "%s %d %s", name, &id, status) == 3) {
+    while (fscanf(f, "%49s %d %19s", name, &id, status) == 3) {
         if (strcmp(name, user) == 0) {
             printf("ID: %d | Status: %s\n", id, status);
             found = 1;
@@ -95,7 +92,7 @@ static void chk(const char *user) {
 }
 
 static void viewhistory(const char *user) {
-    char name[50], date[20];
+    char name[TEXT_LEN], date[20];
     int id, found = 0;
     FILE *f = fopen("borrow_history.txt", "r");
 
@@ -105,7 +102,7 @@ static void viewhistory(const char *user) {
     }
 
     printf("\nYour Borrowing History:\n");
-    while (fscanf(f, "%s %d %s", name, &id, date) == 3) {
+    while (fscanf(f, "%49s %d %19s", name, &id, date) == 3) {
         if (strcmp(name, user) == 0) {
             printf("ID: %d | Date: %s\n", id, date);
             found = 1;
@@ -117,4 +114,3 @@ static void viewhistory(const char *user) {
 
     fclose(f);
 }
-
